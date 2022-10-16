@@ -13,56 +13,44 @@ const { NotImplementedError } = require('../extensions/index.js');
  * transform([1, 2, 3, '--discard-prev', 4, 5]) => [1, 2, 4, 5]
  * 
  */
-function transform(arr) {
-  if (!Array.isArray(arr)) throw Error("'arr' parameter must be an instance of the Array!")
+function transform(/*arr*/) {
+  /*if (!Array.isArray(arr)) throw Error("'arr' parameter must be an instance of the Array!")
+
+  const copy = Array.from(arr)
 
   const response = []
   let operation = ''
 
-  arr.forEach(item => {
-    //console.log(response);
-    if (typeof item === 'string') {
-      operation = item
-      return
+  let index = 0
+
+  while (index < copy.length) {
+    const current = copy[index]
+
+    if (typeof current === 'string') operation = current
+
+    if (operation === '' && current !== undefined) {
+      response.push(current)
+      continue
+    }
+    if (operation === '--discard-next') {
+      if (index + 1 < copy.length) copy[index + 1] = undefined
+      index += 2
+      continue
+    }
+    if (operation === '--discard-prev') {
+      if (index - 1 < copy.length) copy[index + 1] = undefined
+      index += 2
+      continue
     }
 
-    if (operation === '') {
-      response.push(item)
-      return
-    }
+  }
 
-    switch(operation) {
-      case '--discard-next':
-        break
-      case '--discard-prev':
-        response.length !== 0 && response.pop()
-        response.push(item)
-        break
-      case '--double-next':
-        response.push(item)
-        response.push(item)
-        break
-      case '--double-prev':
-        if (response.length !== 0) {
-          const last = response[response.length - 1]
-          response.push(last)
-        } 
-        response.push(item)
-        break
-      default:
-        response.push(item)
-        break
-    }
 
-    operation = ''
-  })
+  return response*/
 
-  return response
+  throw new NotImplementedError('Not implemented');
 }
 
 module.exports = {
   transform
 };
-
-
-//console.log(transform([1, 2, 3, '--discard-next', 1337, '--double-prev', 4, 5]));
