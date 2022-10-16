@@ -18,8 +18,10 @@ const { NotImplementedError } = require('../extensions/index.js');
 function repeater(str, options) {
   const additionArray = []
 
-  for (let counter = 0; counter < options.additionRepeatTimes; ++counter)
+  if (options.hasOwnProperty('addition')) {
+    for (let counter = 0; counter < (options.additionRepeatTimes != null ? options.additionRepeatTimes : 1); ++counter)
     additionArray.push(String(options.addition))
+  }
   
   const addition = additionArray.join(options.additionSeparator != null ? options.additionSeparator.toString() : '|')
 
@@ -27,7 +29,7 @@ function repeater(str, options) {
 
   const responseArray = []
 
-  for (let counter = 0; counter < options.repeatTimes; ++counter) responseArray.push(strAndAddition)
+  for (let counter = 0; counter < (options.repeatTimes != null ? options.repeatTimes : 1); ++counter) responseArray.push(strAndAddition)
 
   return responseArray.join(options.separator != null ? options.separator.toString() : '+')
 }
@@ -35,3 +37,6 @@ function repeater(str, options) {
 module.exports = {
   repeater
 };
+
+
+console.log(repeater('la', { repeatTimes: 3 }));
