@@ -37,6 +37,3 @@ function repeater(str, options) {
 module.exports = {
   repeater
 };
-
-
-console.log(repeater('la', { repeatTimes: 3 }));
