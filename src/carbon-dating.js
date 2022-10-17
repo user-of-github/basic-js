@@ -18,14 +18,16 @@ const HALF_LIFE_PERIOD = 5730;
 
 function dateSample(sampleActivity) {
   const APPROXIMATION = 0.693
-  const tryParseInt = Number.parseInt(sampleActivity)
+  const tryParseFloat = Number.parseFloat(sampleActivity)
 
-  if (Number.isNaN(tryParseInt)) return false
+  if (Number.isNaN(tryParseFloat)) return false
+  if (typeof sampleActivity !== 'string') return false
 
-  if(tryParseInt > MODERN_ACTIVITY) return false
+  if(tryParseFloat > MODERN_ACTIVITY) return false
 
-  const tryResponse = Math.ceil(Math.log(MODERN_ACTIVITY / tryParseInt) * HALF_LIFE_PERIOD / APPROXIMATION)
-  return Number.isFinite(tryResponse) && Number.isNaN(tryResponse) ? tryResponse : false
+  const tryResponse = Math.ceil(HALF_LIFE_PERIOD * Math.log(MODERN_ACTIVITY / tryParseFloat) / APPROXIMATION)
+
+  return Number.isNaN(tryResponse) || tryResponse < 0 || tryResponse === Infinity || tryResponse === -Infinity ? false : tryResponse
 }
 
 
