@@ -1,5 +1,3 @@
-const { NotImplementedError } = require('../extensions/index.js');
-
 const MODERN_ACTIVITY = 15;
 const HALF_LIFE_PERIOD = 5730;
 
@@ -17,11 +15,20 @@ const HALF_LIFE_PERIOD = 5730;
  * dateSample('WOOT!') => false
  *
  */
+
 function dateSample(sampleActivity) {
+  const APPROXIMATION = 0.693
   const tryParseInt = Number.parseInt(sampleActivity)
 
   if (Number.isNaN(tryParseInt)) return false
+
+  if(tryParseInt > MODERN_ACTIVITY) return false
+
+  const tryResponse = Math.ceil(Math.log(MODERN_ACTIVITY / tryParseInt) * HALF_LIFE_PERIOD / APPROXIMATION)
+  return Number.isFinite(tryResponse) && Number.isNaN(tryResponse) ? tryResponse : false
 }
+
+
 
 module.exports = {
   dateSample
