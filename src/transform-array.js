@@ -13,42 +13,38 @@ const { NotImplementedError } = require('../extensions/index.js');
  * transform([1, 2, 3, '--discard-prev', 4, 5]) => [1, 2, 4, 5]
  * 
  */
-function transform(/*arr*/) {
-  /*if (!Array.isArray(arr)) throw Error("'arr' parameter must be an instance of the Array!")
+
+const isControlSequence = str => str === '--discard-next' || str === '--discard-prev' || str === '--double-next' || str === '--double-prev'
+
+const EMPTY_VALUE = 'undefinednull2022'
+
+
+function transform(arr) {
+  if (!Array.isArray(arr)) throw new Error("'arr' parameter must be an instance of the Array!")
 
   const copy = Array.from(arr)
 
+  let previousControlSequence = ''
   const response = []
-  let operation = ''
 
-  let index = 0
+  for (let index = 0; index < copy.length; ++index) {
+    if (isControlSequence(copy[index])) {
+      previousControlSequence = copy[index]
 
-  while (index < copy.length) {
-    const current = copy[index]
+      if (copy[index] === '--discard-next' && index + 1 < copy.length) copy[index + 1] = EMPTY_VALUE
+      if (copy[index] === '--discard-prev') response.length > 0 && index - 1 >= 0 && copy[index - 1] !== EMPTY_VALUE && response.pop()
+      if (copy[index] === '--double-prev') index - 1 >= 0 && copy[index - 1] !== EMPTY_VALUE && response.push(copy[index - 1])
 
-    if (typeof current === 'string') operation = current
-
-    if (operation === '' && current !== undefined) {
-      response.push(current)
-      continue
-    }
-    if (operation === '--discard-next') {
-      if (index + 1 < copy.length) copy[index + 1] = undefined
-      index += 2
-      continue
-    }
-    if (operation === '--discard-prev') {
-      if (index - 1 < copy.length) copy[index + 1] = undefined
-      index += 2
       continue
     }
 
-  }
+    if (previousControlSequence === '--double-next') copy[index] !== EMPTY_VALUE && response.push(copy[index], copy[index])
+    else copy[index] !== EMPTY_VALUE && response.push(copy[index])
 
+    previousControlSequence = ''
+  } 
 
-  return response*/
-
-  throw new NotImplementedError('Not implemented');
+  return response
 }
 
 module.exports = {
