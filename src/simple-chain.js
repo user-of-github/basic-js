@@ -15,9 +15,12 @@ const chainMaker = {
     return this
   },
   removeLink(pos) {
-    if (Number.isNaN(Number.parseInt(pos))) throw new Error("You can't remove incorrect link!")
+    if(typeof(pos) != 'number'  || pos - 1 < 0 || pos > this.array.length) {
+      while (this.array.length > 0) this.array.pop()
+      throw new Error("You can't remove incorrect link!")
+    }
     //if (String(Number.parseInt(pos)) !== pos) throw new Error("You can't remove incorrect link!") 
-    const position = this.array.indexOf(item => item === `( ${String(pos)} )`) - 1
+    const position = pos - 1
     //if (position === -1) throw new Error("You can't remove incorrect link!")
 
     this.array.splice(position, 1)
@@ -39,5 +42,3 @@ const chainMaker = {
 module.exports = {
   chainMaker
 };
-
-console.log(chainMaker.addLink(function () { }).addLink('2nd').addLink('3rd').removeLink(2).reverseChain().finishChain() === '( 3rd )~~( function () { } )');
